@@ -27,6 +27,10 @@ export const siteConfig = {
       title: "Kontakt",
       href: "/contact",
     },
+    {
+      title: "Orders",
+      href: "/orders",
+    },
   ],
   links: {
     twitter: "https://twitter.com/brokolyyyyy",
