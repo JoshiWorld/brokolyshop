@@ -22,6 +22,7 @@ import { taskSchema } from "../data/schema"
 import { useEffect, useState } from 'react';
 import { Label } from '@prisma/client';
 import process from "process";
+import {useSession} from "next-auth/react";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -31,6 +32,7 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original);
+  const { data: session } = useSession();
 
   const [labels, setLabels] = useState<Label[] | null>(null);
 
@@ -95,7 +97,7 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => fetchTasksDelete(task.labelId, session?.user?.accessToken)}>
           <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
@@ -103,4 +105,28 @@ export function DataTableRowActions<TData>({
       </DropdownMenuContent>
     </DropdownMenu>
   )
+}
+
+const fetchTasksDelete = async (labelId: number, accessToken: string) => {
+  try {
+    const response = await fetch(`http://localhost:${process.env.PORT}/api/tasks/` + labelId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': accessToken,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete task.');
+    }
+    const isEmptyResponse = response.headers.get('content-length') === '0';
+
+    if (!isEmptyResponse) {
+      const data = await response.json();
+      console.log(data); // Process the response data if needed
+    }
+  } catch (error) {
+    console.error('Error deleting task:', error);
+  }
 }
