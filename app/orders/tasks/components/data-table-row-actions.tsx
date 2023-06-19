@@ -18,10 +18,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { labels } from "../data/data"
 import { taskSchema } from "../data/schema"
 import { useEffect, useState } from 'react';
 import { Label } from '@prisma/client';
+import process from "process";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -38,7 +38,7 @@ export function DataTableRowActions<TData>({
     // Fetch the label data from the backend API based on the labelId of the row
     const fetchLabels = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/labels');
+        const response = await fetch(`http://localhost:${process.env.PORT}/api/labels`);
         const data = await response.json();
 
         setLabels(data);

@@ -32,9 +32,9 @@ export function SignInButton() {
       <div className="max-w-sm p-4">
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Login to your account</CardTitle>
+            <CardTitle className="text-2xl">Login-Page</CardTitle>
             <CardDescription>
-              Enter your email below to login
+              Deine E-Mail ist gleichzeitig auch dein Benutzername
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">

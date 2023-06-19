@@ -8,6 +8,8 @@ import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { UserNav } from "./components/user-nav"
 import { getSession, GetSessionParams } from 'next-auth/react';
+import * as process from "process";
+import {processEnv} from "@next/env";
 
 // @ts-ignore
 export async function getServerSideProps(context) {
@@ -38,7 +40,7 @@ async function getTasks(accessToken) {
   //   path.join(process.cwd(), "app/orders/tasks/data/tasks.json")
   // )
 
-  const res = await fetch('http://localhost:3001/api/tasks', {
+  const res = await fetch(`http://localhost:${process.env.PORT}/api/tasks`, {
     method: 'GET',
     // @ts-ignore
     headers: {

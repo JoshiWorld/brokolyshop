@@ -12,8 +12,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {useSession} from "next-auth/react";
 
 export function UserNav() {
+  const { data: session } = useSession();
+
+  const user = session?.user || '';
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,9 +32,9 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">{session?.user?.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              m@example.com
+              {session?.user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -37,22 +42,22 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+            <span>Profil</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
+            <span>Rechnungen</span>
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <span>Einstellungen</span>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <PlusCircle className="mr-2 h-4 w-4" />
-            <span>New Team</span>
+            <span>Neues Team</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
