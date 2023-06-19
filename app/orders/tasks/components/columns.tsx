@@ -12,6 +12,7 @@ import { DataTableRowActions } from "./data-table-row-actions"
 import { useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
 import { Label } from '@prisma/client';
+import process from "process";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -57,7 +58,7 @@ export const columns: ColumnDef<Task>[] = [
         // Fetch the label data from the backend API based on the labelId of the row
         const fetchLabel = async () => {
           try {
-            const response = await fetch('http://localhost:3001/api/labels/' + row.original.labelId);
+            const response = await fetch(`http://localhost:${process.env.PORT}/api/labels/` + row.original.labelId);
             const data = await response.json();
             setLabel(data);
           } catch (error) {
