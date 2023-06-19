@@ -30,7 +30,41 @@ model Post {
   authorId  Int?
 }
 
+model Label {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  title     String
+  Task      Task[]
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String
+  description String
+  priority    Priority
+  termination DateTime?
+  status      Status
+  label       Label?    @relation(fields: [labelId], references: [id])
+  labelId     Int?
+}
+
 enum Role {
   USER
   ADMIN
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  TODO
+  INPROGRESS
+  DONE
+  CANCELED
+  BACKLOG
 }

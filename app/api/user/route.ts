@@ -1,4 +1,3 @@
-// user-route.ts
 import { createUser } from '@/services/user-service';
 
 interface RequestBody {

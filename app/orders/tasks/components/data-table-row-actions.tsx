@@ -20,6 +20,8 @@ import {
 
 import { labels } from "../data/data"
 import { taskSchema } from "../data/schema"
+import { useEffect, useState } from 'react';
+import { Label } from '@prisma/client';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -28,7 +30,25 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original)
+  const task = taskSchema.parse(row.original);
+
+  const [labels, setLabels] = useState<Label[] | null>(null);
+
+  useEffect(() => {
+    // Fetch the label data from the backend API based on the labelId of the row
+    const fetchLabels = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/labels');
+        const data = await response.json();
+
+        setLabels(data);
+      } catch (error) {
+        console.error('Error fetching labels:', error);
+      }
+    };
+
+    fetchLabels();
+  }, [row.original]);
 
   return (
     <DropdownMenu>
@@ -61,13 +81,17 @@ export function DataTableRowActions<TData>({
             Labels
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
+            {labels ? (
+              <DropdownMenuRadioGroup value={task.labelId + ""}>
+                {labels.map((label) => (
+                  <DropdownMenuRadioItem key={label.id} value={label.title}>
+                    {label.title}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            ) : (
+              <div>Loading labels...</div>
+            )}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />

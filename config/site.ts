@@ -28,8 +28,9 @@ export const siteConfig = {
       href: "/contact",
     },
     {
-      title: "Orders",
+      title: "Bestellungen",
       href: "/orders",
+      role: "ADMIN",
     },
   ],
   links: {

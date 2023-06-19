@@ -8,6 +8,8 @@ import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 import Providers from '@/components/Providers';
+import { session } from 'next-auth/core/routes';
+import { Session } from 'next-auth';
 
 export const metadata: Metadata = {
   title: {

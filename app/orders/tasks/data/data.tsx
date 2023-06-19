@@ -8,6 +8,7 @@ import {
   HelpCircle,
   XCircle,
 } from "lucide-react"
+import { Priority, Task, Status, Label } from '@prisma/client';
 
 export const labels = [
   {
@@ -26,27 +27,27 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "backlog",
+    value: "BACKLOG",
     label: "Backlog",
     icon: HelpCircle,
   },
   {
-    value: "todo",
+    value: "TODO",
     label: "Todo",
     icon: Circle,
   },
   {
-    value: "in progress",
+    value: "INPROGRESS",
     label: "In Progress",
     icon: ArrowUpCircle,
   },
   {
-    value: "done",
+    value: "DONE",
     label: "Done",
     icon: CheckCircle2,
   },
   {
-    value: "canceled",
+    value: "CANCELED",
     label: "Canceled",
     icon: XCircle,
   },
@@ -55,17 +56,17 @@ export const statuses = [
 export const priorities = [
   {
     label: "Low",
-    value: "low",
+    value: "LOW",
     icon: ArrowDownToLine,
   },
   {
     label: "Medium",
-    value: "medium",
+    value: "MEDIUM",
     icon: ArrowRightToLine,
   },
   {
     label: "High",
-    value: "high",
+    value: "HIGH",
     icon: ArrowUpToLine,
   },
 ]

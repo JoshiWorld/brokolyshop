@@ -9,6 +9,9 @@ import { labels, priorities, statuses } from "../data/data"
 import { Task } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
+import { useEffect, useState } from 'react';
+import { getSession, useSession } from 'next-auth/react';
+import { Label } from '@prisma/client';
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -47,11 +50,27 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label)
+      const [label, setLabel] = useState<Label | null>(null);
+      // const label = labels.find((label) => label.value === row.original.labelId + "");
+
+      useEffect(() => {
+        // Fetch the label data from the backend API based on the labelId of the row
+        const fetchLabel = async () => {
+          try {
+            const response = await fetch('http://localhost:3001/api/labels/' + row.original.labelId);
+            const data = await response.json();
+            setLabel(data);
+          } catch (error) {
+            console.error('Error fetching label:', error);
+          }
+        };
+
+        fetchLabel();
+      }, [row.original.labelId]);
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && <Badge variant="outline">{label.title}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
           </span>
