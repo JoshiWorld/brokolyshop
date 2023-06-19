@@ -69,12 +69,45 @@ export const columns: ColumnDef<Task>[] = [
         fetchLabel();
       }, [row.original.labelId]);
 
+
+
+      const editable = true;
+      const [editing, setEditing] = useState(false);
+      const [inputValue, setInputValue] = useState(row.getValue("title"));
+
+      const handleInputChange = (event) => {
+        setInputValue(event.target.value);
+      };
+
+      const handleEditStart = () => {
+        setEditing(true);
+      };
+
+      const handleEditEnd = () => {
+        setEditing(false);
+        // Perform any necessary actions with the updated value
+        console.log(inputValue);
+      };
+
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.title}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
-          </span>
+          {editable && editing ? (
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onBlur={handleEditEnd}
+              className="max-w-[500px] truncate font-medium outline-none border-b"
+            />
+          ) : (
+            <span
+              className="max-w-[500px] truncate font-medium cursor-pointer"
+              onClick={editable ? handleEditStart : undefined}
+            >
+        {row.getValue("title")}
+      </span>
+          )}
         </div>
       )
     },
