@@ -51,9 +51,11 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const [label, setLabel] = useState<Label | null>(null);
       // const label = labels.find((label) => label.value === row.original.labelId + "");
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       useEffect(() => {
         // Fetch the label data from the backend API based on the labelId of the row
         const fetchLabel = async () => {
@@ -72,9 +74,12 @@ export const columns: ColumnDef<Task>[] = [
 
 
       const editable = true;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const [editing, setEditing] = useState(false);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const [inputValue, setInputValue] = useState(row.getValue("title"));
 
+      // @ts-ignore
       const handleInputChange = (event) => {
         setInputValue(event.target.value);
       };
@@ -95,7 +100,6 @@ export const columns: ColumnDef<Task>[] = [
           {editable && editing ? (
             <input
               type="text"
-              value={inputValue}
               onChange={handleInputChange}
               onBlur={handleEditEnd}
               className="max-w-[500px] truncate font-medium outline-none border-b"

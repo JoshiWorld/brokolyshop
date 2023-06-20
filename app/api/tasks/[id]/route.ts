@@ -12,3 +12,14 @@ export async function DELETE(request: Request, {params}:{params:{id:number}}) {
 
   return new Response(JSON.stringify(deletedTask));
 }
+
+export async function GET(request: Request, {params}: {params:{id:number}}) {
+  const accessToken = request.headers.get("authorization");
+  if(checkJwt(accessToken)) return null;
+
+  const task = await prisma.task.findFirst({
+    where: { id: +params.id }
+  });
+
+  return new Response(JSON.stringify(task));
+}
