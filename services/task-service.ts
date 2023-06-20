@@ -1,6 +1,6 @@
+// user-service.ts
 import prisma from '@/lib/prisma';
-import {Priority, Status} from "@prisma/client";
-import {createLabel, getLabelByTitle} from "@/services/label-service";
+import { Label, Priority, Status } from '@prisma/client';
 
 interface CreateTaskInput {
   title: string;
@@ -8,25 +8,19 @@ interface CreateTaskInput {
   priority: Priority;
   termination?: Date;
   status: Status;
-  label: string;
+  label: Label;
 }
 
-interface UpdateTaskInput {
+interface UpdateUserInput {
   title?: string;
   description?: string;
   priority?: Priority;
   termination?: Date;
   status?: Status;
-  label?: string;
+  label?: Label;
 }
 
 export async function createTask(task: CreateTaskInput) {
-  let label = await getLabelByTitle(task.label);
-
-  if(!label) {
-    label = await createLabel({ title: task.label });
-  }
-
   const createdTask = await prisma.task.create({
     data: {
       title: task.title,
@@ -35,7 +29,7 @@ export async function createTask(task: CreateTaskInput) {
       termination: task.termination,
       status: task.status,
       // @ts-ignore
-      labelId: label.id
+      'label': task.label
     },
   });
 
@@ -50,7 +44,7 @@ export async function getTaskById(id: number) {
   return task;
 }
 
-export async function updateUser(id: number, updates: UpdateTaskInput) {
+export async function updateTask(id: number, updates: UpdateUserInput) {
   const task = await prisma.task.update({
     where: { id },
     // @ts-ignore
