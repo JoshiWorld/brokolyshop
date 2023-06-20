@@ -3,7 +3,7 @@
 import { Row } from "@tanstack/react-table"
 import { Copy, MoreHorizontal, Pen, Star, Tags, Trash } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +23,8 @@ import { useEffect, useState } from 'react';
 import { Label } from '@prisma/client';
 import process from "process";
 import {useSession} from "next-auth/react";
+import Link from 'next/link';
+import * as React from 'react';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -68,7 +70,9 @@ export function DataTableRowActions<TData>({
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>
           <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Edit
+          <Link href={`/orders/tasks/edit/${task.id}`} rel="noreferrer">
+            Edit
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />

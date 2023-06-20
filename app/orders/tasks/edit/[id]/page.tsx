@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "@/app/orders/forms/profile-form"
+import ProfileForm from "@/app/orders/tasks/edit/[id]/profile-form"
 
 export default function SettingsProfilePage({ params }: { params: { id: number } }) {
   return (

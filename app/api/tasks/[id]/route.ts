@@ -23,3 +23,24 @@ export async function GET(request: Request, {params}: {params:{id:number}}) {
 
   return new Response(JSON.stringify(task));
 }
+
+export async function PUT(request: Request, { params }: { params: { id: number } }) {
+  const accessToken = request.headers.get("authorization");
+  if (checkJwt(accessToken)) return null;
+
+  const body = await request.json();
+  const updatedTask = await prisma.task.update({
+    where: { id: +params.id },
+    data: {
+      title: body.title,
+      status: body.status,
+      priority: body.priority,
+      description: body.description,
+      termination: new Date(body.termination), // Assuming `termination` is a string in ISO 8601 format
+      label: body.label,
+    },
+  });
+
+  return new Response(JSON.stringify(updatedTask));
+}
+
