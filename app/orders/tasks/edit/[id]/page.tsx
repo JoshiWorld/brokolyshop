@@ -1,11 +1,14 @@
-import dynamic from 'next/dynamic';
+import { Separator } from "@/components/ui/separator"
+import { ProfileForm } from "@/app/orders/forms/profile-form"
 
-export default function TasksEditPage({ params }: { params: { id: number } }) {
-  // @ts-ignore
-  const TaskPage = dynamic(() => import("./TaskEditPage"), {
-    ssr: false
-  });
-
-  // @ts-ignore
-  return <TaskPage params={params} />
+export default function SettingsProfilePage({ params }: { params: { id: number } }) {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">TaskID: {params.id}</h3>
+      </div>
+      <Separator />
+      <ProfileForm id={params.id} />
+    </div>
+  )
 }

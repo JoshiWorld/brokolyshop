@@ -1,6 +1,8 @@
 "use client"
 
 import { useSession } from "next-auth/react";
+// @ts-ignore
+import { zodResolver } from "@hookform/resolvers/zod"
 import {Controller, useFieldArray, useForm} from "react-hook-form"
 import * as z from "zod"
 
@@ -28,8 +30,6 @@ import {
 import process from "process";
 import {useEffect, useState} from "react";
 import {log} from "next/dist/server/typescript/utils";
-// @ts-ignore
-import { zodResolver } from '@hookform/resolvers/zod';
 
 const profileFormSchema = z.object({
   title: z
@@ -96,11 +96,7 @@ async function fetchLabels(id: number) {
 }
 
 
-interface ProfileFormProps {
-    id: number
-}
-
-export function ProfileForm({ id }: ProfileFormProps) {
+export function ProfileForm(id: number) {
   const { data: session } = useSession();
   const [defaultValues, setDefaultValues] = useState<Partial<ProfileFormValues>>({});
 
@@ -114,7 +110,7 @@ export function ProfileForm({ id }: ProfileFormProps) {
     // @ts-ignore
     if (session?.user?.accessToken) {
       // @ts-ignore
-      fetchDefaultValues(session?.user?.accessToken, id)
+      fetchDefaultValues(session?.user?.accessToken)
         .then((data) => {
           setDefaultValues(data);
         })
@@ -206,30 +202,20 @@ export function ProfileForm({ id }: ProfileFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <Controller
-                    control={form.control}
-                    name="status"
-                    defaultValue={defaultValues.status || ""}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Status festlegen" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="TODO">Todo</SelectItem>
-                          <SelectItem value="INPROGRESS">In Progress</SelectItem>
-                          <SelectItem value="DONE">Done</SelectItem>
-                          <SelectItem value="CANCELED">Canceled</SelectItem>
-                          <SelectItem value="BACKLOG">Backlog</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
+                  <Select onValueChange={field.onChange} defaultValue={defaultValues.status}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Status festlegen" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="TODO">Todo</SelectItem>
+                      <SelectItem value="INPROGRESS">In Progress</SelectItem>
+                      <SelectItem value="DONE">Done</SelectItem>
+                      <SelectItem value="CANCELED">Canceled</SelectItem>
+                      <SelectItem value="BACKLOG">Backlog</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormDescription>
                     Lege den aktuellen Status fest
                   </FormDescription>
