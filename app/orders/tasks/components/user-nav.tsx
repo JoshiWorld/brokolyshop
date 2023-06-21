@@ -17,15 +17,13 @@ import {useSession} from "next-auth/react";
 export function UserNav() {
   const { data: session } = useSession();
 
-  const user = session?.user || '';
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
             <AvatarImage src="/avatars/03.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback>{session?.user?.name?.toUpperCase().charAt(0)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

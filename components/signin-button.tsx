@@ -28,7 +28,7 @@ export function SignInButton() {
   }
 
   return (
-    <div className="flex justify-center items-center h-200">
+    <div className="h-200 flex items-center justify-center">
       <div className="max-w-sm p-4">
         <Card>
           <CardHeader className="space-y-1">
