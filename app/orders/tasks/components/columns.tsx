@@ -5,14 +5,23 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 
-import { labels, priorities, statuses } from "../data/data"
+import { priorities, statuses } from "../data/data"
 import { Task } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 import { useEffect, useState } from 'react';
-import { getSession, useSession } from 'next-auth/react';
 import { Label } from '@prisma/client';
 import process from "process";
+import { useRouter } from "next/navigation"
+
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { CalendarDays } from "lucide-react"
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -53,6 +62,8 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const [label, setLabel] = useState<Label | null>(null);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const router = useRouter();
       // const label = labels.find((label) => label.value === row.original.labelId + "");
 
       // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -71,47 +82,47 @@ export const columns: ColumnDef<Task>[] = [
         fetchLabel();
       }, [row.original.labelId]);
 
-
-
-      const editable = true;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [editing, setEditing] = useState(false);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [inputValue, setInputValue] = useState(row.getValue("title"));
-
-      // @ts-ignore
-      const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-      };
-
-      const handleEditStart = () => {
-        setEditing(true);
-      };
-
-      const handleEditEnd = () => {
-        setEditing(false);
-        // Perform any necessary actions with the updated value
-        console.log(inputValue);
-      };
+      const showTask = () => {
+        router.push('/orders/tasks/' + row.original.id);
+      }
 
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.title}</Badge>}
-          {editable && editing ? (
-            <input
-              type="text"
-              onChange={handleInputChange}
-              onBlur={handleEditEnd}
-              className="max-w-[500px] truncate font-medium outline-none border-b"
-            />
-          ) : (
-            <span
-              className="max-w-[500px] truncate font-medium cursor-pointer"
-              onClick={editable ? handleEditStart : undefined}
-            >
-        {row.getValue("title")}
-      </span>
-          )}
+          <span
+            className="max-w-[500px] cursor-pointer truncate font-medium"
+            onClick={showTask}
+          >
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link">
+                  {row.getValue("title")}
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80">
+                <div className="flex justify-between space-x-4">
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">{row.getValue("title")}</h4>
+                    <p className="text-sm">
+                      {row.original.description}
+                    </p>
+                    <div className="flex items-center pt-2">
+                      <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
+                      {row.original.termination ? (
+                        <span className="text-xs text-muted-foreground">
+                          Abgabedatum: {new Date(row.original.termination).toLocaleDateString("en-US", {day:'numeric', month:'long', year:'numeric'})}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">
+                          Abgabedatum: Nicht festgelegt
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </span>
         </div>
       )
     },

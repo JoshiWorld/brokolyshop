@@ -2,7 +2,6 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
-import {cn} from '@/lib/utils';
 import * as React from 'react';
 
 export default function IndexPage() {
