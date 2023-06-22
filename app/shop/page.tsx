@@ -1,12 +1,38 @@
-import Link from "next/link"
+"use client"
 
 import { shopConfig } from "@/config/shop"
-import {Button, buttonVariants} from "@/components/ui/button"
-import {cn} from '@/lib/utils';
+import {Button} from "@/components/ui/button"
 import * as React from 'react';
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card';
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function IndexPage() {
+  const [isSending, setIsSending] = useState(false);
+  const { data: session } = useSession();
+
+  const handleClick = async () => {
+    setIsSending(true);
+    try {
+      const response = await fetch('/api/email', {
+        method: 'POST',
+        headers: {
+          // @ts-ignore
+          authorization: session?.user?.accessToken
+        }
+      });
+      if (response.ok) {
+        console.log('Email sent successfully!');
+      } else {
+        console.error('Error sending email:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
@@ -31,7 +57,7 @@ export default function IndexPage() {
               </CardContent>
               <CardFooter className="flex justify-between">
                 <p>{item.price} €</p>
-                <Button>Warenkorb</Button>
+                <Button disabled={isSending} onClick={handleClick}>{isSending ? 'Sending...' : 'Warenkorb'}</Button>
               </CardFooter>
             </Card>
         )}
