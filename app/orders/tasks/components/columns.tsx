@@ -86,6 +86,7 @@ export const columns: ColumnDef<Task>[] = [
         router.push('/orders/tasks/' + row.original.id);
       }
 
+      // @ts-ignore
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.title}</Badge>}
@@ -104,13 +105,14 @@ export const columns: ColumnDef<Task>[] = [
                   <div className="space-y-1">
                     <h4 className="text-sm font-semibold">{row.getValue("title")}</h4>
                     <p className="text-sm">
-                      {row.original.description}
+                      {// @ts-ignore
+                        row.original.description}
                     </p>
                     <div className="flex items-center pt-2">
                       <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
                       {row.original.termination ? (
                         <span className="text-xs text-muted-foreground">
-                          Abgabedatum: {new Date(row.original.termination).toLocaleDateString("en-US", {day:'numeric', month:'long', year:'numeric'})}
+                          Abgabedatum: {new Date(row.original.termination).toLocaleDateString("de-DE", {day:'numeric', month:'long', year:'numeric'})}
                         </span>
                       ) : (
                         <span className="text-xs text-muted-foreground">
@@ -179,6 +181,59 @@ export const columns: ColumnDef<Task>[] = [
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
+    },
+  },
+  {
+    accessorKey: "termination",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Abgabe" />
+    ),
+    cell: ({ row }) => {
+      const currentDate = new Date();
+      // @ts-ignore
+      const terminationDate = new Date(row.original.termination);
+      const timeDifference = terminationDate.getTime() - currentDate.getTime();
+      const daysLeft = Math.ceil(timeDifference / (24 * 60 * 60 * 1000));
+      const formattedTerminationDate = terminationDate.toLocaleDateString("de-DE", {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      return (
+        <div className="w-[80px]">
+          <span>
+            {row.original.termination ? (
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <span className={daysLeft > 3 ? "" : "text-red-500"}>{daysLeft} Tage verbleibend</span>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="flex justify-between space-x-4">
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-semibold">Abgabedatum</h4>
+                      <div className="flex items-center pt-2">
+                        <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
+                        {row.original.termination ? (
+                          <span className="text-xs text-muted-foreground">
+                            {formattedTerminationDate}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">
+                            Abgabedatum: Nicht festgelegt
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            ) : (
+              <span>Kein Datum festgelegt</span>
+            )}
+          </span>
+        </div>
+      )
     },
   },
   {

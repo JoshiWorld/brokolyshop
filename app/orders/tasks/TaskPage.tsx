@@ -1,7 +1,5 @@
 "use client";
 
-// import { promises as fs } from "fs"
-// import path from "path"
 import Image from "next/image"
 
 import { columns } from "./components/columns"
@@ -9,7 +7,6 @@ import { DataTable } from "./components/data-table"
 import { UserNav } from "./components/user-nav"
 import { getSession, GetSessionParams } from 'next-auth/react';
 import * as process from "process";
-import {processEnv} from "@next/env";
 
 // @ts-ignore
 export async function getServerSideProps(context) {

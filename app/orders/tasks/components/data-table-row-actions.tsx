@@ -3,7 +3,7 @@
 import { Row } from "@tanstack/react-table"
 import { Copy, MoreHorizontal, Pen, Star, Tags, Trash } from "lucide-react"
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -103,7 +103,7 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => fetchTasksDelete(task.labelId, accessToken)}>
+        <DropdownMenuItem onClick={() => fetchTasksDelete(task.id, accessToken)}>
           <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
@@ -113,9 +113,9 @@ export function DataTableRowActions<TData>({
   )
 }
 
-const fetchTasksDelete = async (labelId: number, accessToken: string) => {
+const fetchTasksDelete = async (id: number, accessToken: string) => {
   try {
-    const response = await fetch(`http://localhost:${process.env.PORT}/api/tasks/` + labelId, {
+    const response = await fetch(`http://localhost:${process.env.PORT}/api/tasks/` + id, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
