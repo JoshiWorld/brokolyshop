@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
@@ -6,8 +8,17 @@ import { Icons } from "@/components/icons"
 import MainNavDynamic from "@/components/main-nav-dynamic"
 import { ThemeToggle } from "@/components/theme-toggle"
 import LoginButton from '@/components/LoginButton';
+import { Badge, badgeVariants } from '@/components/ui/badge';
+import { useEffect, useState } from 'react';
 
 export function SiteHeader() {
+  const [shoppingCart, setShoppingCart] = useState(0);
+
+  useEffect(() => {
+    // @ts-ignore
+    setShoppingCart(sessionStorage.getItem("shoppingCart") ? JSON.parse(sessionStorage.getItem("shoppingCart")).length : 0);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -56,6 +67,11 @@ export function SiteHeader() {
                 })}
               >
                 <Icons.shoppingCart />
+                {shoppingCart > 0 ? (
+                  <Badge variant="outline" className="bg-origin-padding">{shoppingCart}</Badge>
+                ) : (
+                  <></>
+                )}
                 <span className="sr-only">ShoppingCart</span>
               </div>
             </Link>
