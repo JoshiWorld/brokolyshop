@@ -76,6 +76,7 @@ export default function TaskViewPage({ params }: { params: { id: number } }) {
               Task ID
             </td>
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
+              {/*@ts-ignore*/}
               {defaultValues.id}
             </td>
           </tr>
@@ -84,6 +85,7 @@ export default function TaskViewPage({ params }: { params: { id: number } }) {
               Titel
             </td>
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
+              {/*@ts-ignore*/}
               {defaultValues.title}
             </td>
           </tr>
@@ -92,6 +94,7 @@ export default function TaskViewPage({ params }: { params: { id: number } }) {
               Beschreibung
             </td>
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
+              {/*@ts-ignore*/}
               {defaultValues.description}
             </td>
           </tr>
@@ -100,6 +103,7 @@ export default function TaskViewPage({ params }: { params: { id: number } }) {
               Status
             </td>
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
+              {/*@ts-ignore*/}
               {defaultValues.status}
             </td>
           </tr>
@@ -108,6 +112,7 @@ export default function TaskViewPage({ params }: { params: { id: number } }) {
               Priorität
             </td>
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
+              {/*@ts-ignore*/}
               {defaultValues.priority}
             </td>
           </tr>
