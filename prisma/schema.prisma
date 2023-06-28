@@ -15,19 +15,8 @@ model User {
   createdAt DateTime @default(now())
   email     String   @unique
   password  String
-  name      String?
+  name      String
   role      Role     @default(USER)
-  posts     Post[]
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  published Boolean  @default(false)
-  title     String   @db.VarChar(255)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
 }
 
 model Label {
@@ -50,6 +39,19 @@ model Task {
   labelId     Int?
 }
 
+model Product {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String
+  stock       Stock
+  discount    Decimal?
+  price       Decimal
+  image       String?
+  category    String
+}
+
 enum Role {
   USER
   ADMIN
@@ -67,4 +69,10 @@ enum Status {
   DONE
   CANCELED
   BACKLOG
+}
+
+enum Stock {
+  ONSTOCK
+  LOWSTOCK
+  NOSTOCK
 }
