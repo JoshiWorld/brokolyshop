@@ -53,8 +53,7 @@ export function SiteHeader() {
               </div>
             </Link>
             <Link
-              href={siteConfig.links.instagram}
-              target="_blank"
+              href="/shop/shoppingcart"
               rel="noreferrer"
             >
               <div
