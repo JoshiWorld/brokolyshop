@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
 import { shopConfig } from '@/config/shop';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import process from 'process';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { ShoppingCartContext } from '@/app/shop/ShoppingCartContext';
 
 interface ArticleStructure {
   id: number;
@@ -21,15 +22,16 @@ async function getProducerArticles() {
   return tasks;
 }
 
-function ShopPage() {
+function MusicShopPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [cartItems, setCartItems] = useState<ArticleStructure[]>([]);
+  // @ts-ignore
+  const { shoppingCart } = useContext(ShoppingCartContext);
+  // @ts-ignore
+  const { addItemToCart } = useContext(ShoppingCartContext);
   const [articles, setArticles] = useState<ArticleStructure[]>([]);
   const memoizedArticles = useMemo(() => articles, [articles]);
 
   useEffect(() => {
-    // @ts-ignore
-    setCartItems(sessionStorage.getItem("shoppingCart") ? JSON.parse(sessionStorage.getItem("shoppingCart")) : []);
     getProducerArticles().then(data => {
       setArticles(data);
       setIsLoading(false);
@@ -38,11 +40,6 @@ function ShopPage() {
       setIsLoading(false);
     });
   }, []);
-
-  function addItemToCart(item: ArticleStructure) {
-    cartItems.push(item);
-    sessionStorage.setItem("shoppingCart", JSON.stringify(cartItems));
-  }
 
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
@@ -59,25 +56,37 @@ function ShopPage() {
         {isLoading ? (
           <p>Loading articles...</p>
         ) : (
-          memoizedArticles?.map((item, index) => (
-            <Card key={item.id}>
-              <CardHeader>
-                <CardTitle>{item.title}</CardTitle>
-                <CardDescription>{item.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>{item.image}</p>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <p>{item.price} €</p>
-                <Button onClick={() => addItemToCart(item)}><Icons.shoppingCart /></Button>
-              </CardFooter>
-            </Card>
-          ))
+          memoizedArticles?.map((item, index) => {
+            // @ts-ignore
+            const isInCart = shoppingCart.find((cartItem) => cartItem.id === item.id);
+
+            return (
+              <Card key={item.id}>
+                <CardHeader>
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardDescription>{item.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>{item.image}</p>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                  <p>{item.price} €</p>
+                  <Button
+                    onClick={() => addItemToCart(item)}
+                    /*@ts-ignore*/
+                    disabled={isInCart}
+                    className={isInCart ? 'disabled' : ''}
+                  >
+                    {isInCart ? <Icons.checkMark className="text-gray-500" /> : <Icons.shoppingCart />}
+                  </Button>
+                </CardFooter>
+              </Card>
+            );
+          })
         )}
       </div>
     </section>
   );
 }
 
-export default ShopPage;
+export default MusicShopPage;

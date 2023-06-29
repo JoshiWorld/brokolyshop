@@ -20,10 +20,6 @@ export const siteConfig = {
       href: "/shop",
     },
     {
-      title: "Merch",
-      href: "/merch",
-    },
-    {
       title: "Kontakt",
       href: "/contact",
     },

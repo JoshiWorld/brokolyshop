@@ -53,6 +53,7 @@ export default function IndexPage() {
                 <CardDescription>{item.description}</CardDescription>
               </CardHeader>
               <CardContent>
+                {/* @ts-ignore */}
                 <p>{item.content}</p>
               </CardContent>
               <CardFooter className="flex justify-between">

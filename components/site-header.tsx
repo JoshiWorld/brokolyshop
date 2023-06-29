@@ -8,16 +8,13 @@ import { Icons } from "@/components/icons"
 import MainNavDynamic from "@/components/main-nav-dynamic"
 import { ThemeToggle } from "@/components/theme-toggle"
 import LoginButton from '@/components/LoginButton';
-import { Badge, badgeVariants } from '@/components/ui/badge';
-import { useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { useContext, useEffect } from 'react';
+import { ShoppingCartContext } from '@/app/shop/ShoppingCartContext';
 
 export function SiteHeader() {
-  const [shoppingCart, setShoppingCart] = useState(0);
-
-  useEffect(() => {
-    // @ts-ignore
-    setShoppingCart(sessionStorage.getItem("shoppingCart") ? JSON.parse(sessionStorage.getItem("shoppingCart")).length : 0);
-  }, []);
+  // @ts-ignore
+  const { shoppingCart } = useContext(ShoppingCartContext);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -62,13 +59,15 @@ export function SiteHeader() {
             >
               <div
                 className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
+                  size: 'sm',
+                  variant: 'ghost',
                 })}
               >
                 <Icons.shoppingCart />
-                {shoppingCart > 0 ? (
-                  <Badge variant="outline" className="bg-origin-padding">{shoppingCart}</Badge>
+                {shoppingCart.length > 0 ? (
+                  <Badge variant="outline" className="bg-origin-padding">
+                    {shoppingCart.length}
+                  </Badge>
                 ) : (
                   <></>
                 )}
